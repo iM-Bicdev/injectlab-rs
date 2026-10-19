@@ -17,7 +17,7 @@ fn manifest() -> String {
 }
 
 fn default_attack_set() -> PathBuf {
-    PathBuf::from(format!("{}/../injectlab/attacks/attack-set-v1.3.json", manifest()))
+    PathBuf::from(format!("{}/../injectlab/attacks/attack-set-v1.4.json", manifest()))
 }
 
 fn default_control_set() -> PathBuf {

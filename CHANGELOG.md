@@ -4,6 +4,22 @@ The Rust port of [injectlab](../injectlab) (`../injectlab`), judged by the
 parity harnesses in `scripts/`, not by vibes. A parity break is a port bug
 until proven otherwise.
 
+## v0.7.0 — the gray-case port
+- Default set bumped to injectlab **v1.4**: 8 new gray-case probes (INJ-047..054),
+  new category `gray-case`, new `channel-trust` mechanism (models reasoning from
+  channel-trust priors instead of the instruction's authority chain — the failure
+  field note 001 caught a frontier model making in the wild).
+- Mock fixtures ported fixture-for-fixture (4 scripted vulnerable / 4 resisted);
+  `ATTACK_FIXTURES` count assertion 46 → 54.
+- `src/lint.rs`: `MECHANISMS` allowlist gains `channel-trust` (mirrors the
+  `lint.py` taxonomy fix) — the parity judge caught the drift before it shipped.
+- Judges updated to the v1.4 set: `mockrun_parity.py` pins `attack-set-v1.4.json`;
+  `run_parity.py` result-count assertion 46 → 54.
+- Rust unit-test count assertions updated 46 → 54 (runner, harness, mock);
+  `mock_run_grades_all_sixty_probes` renamed to `mock_run_grades_all_sixty_eight_probes`.
+- 66/66 tests green; `all_parity.py`: 6/6 PASS — the port still agrees with
+  Python byte-for-byte on the bigger set.
+
 ## v0.6.0 — one verification command
 - New: `scripts/all_parity.py` — `cargo test` + all five judges in one command,
   subset-selectable (`all_parity.py lint run`), exit 2 on unknown judge names

@@ -17,7 +17,7 @@ fn usage() -> ! {
 
 fn main() {
     let manifest = env!("CARGO_MANIFEST_DIR");
-    let mut attack_set = format!("{manifest}/../injectlab/attacks/attack-set-v1.3.json");
+    let mut attack_set = format!("{manifest}/../injectlab/attacks/attack-set-v1.4.json");
     let mut control_set = format!("{manifest}/../injectlab/attacks/control-set-v1.1.json");
 
     let mut args = std::env::args().skip(1);

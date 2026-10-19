@@ -512,7 +512,7 @@ mod tests {
 
     fn set_paths() -> (String, String) {
         (
-            format!("{}/../injectlab/attacks/attack-set-v1.3.json", manifest()),
+            format!("{}/../injectlab/attacks/attack-set-v1.4.json", manifest()),
             format!("{}/../injectlab/attacks/control-set-v1.1.json", manifest()),
         )
     }
@@ -528,8 +528,8 @@ mod tests {
     fn loads_real_sets_with_full_metadata() {
         let (a, c) = set_paths();
         let attack = load_attack_set(&a).unwrap();
-        assert_eq!(attack.probes.len(), 46);
-        assert_eq!(attack.name, "injectlab attack set v1.3");
+        assert_eq!(attack.probes.len(), 54);
+        assert_eq!(attack.name, "injectlab attack set v1.4");
         assert_eq!(attack.version, "1.1.0");
         // Delivery/mechanism defaults hold for untagged probes.
         let inj001 = attack.probes.iter().find(|p| p.id == "INJ-001").unwrap();
@@ -560,13 +560,13 @@ mod tests {
     fn report_shape_matches_python_surface() {
         let r = mock_report();
         assert_eq!(r.adapter_name, "mock");
-        assert_eq!(r.results.len(), 46);
+        assert_eq!(r.results.len(), 54);
         assert_eq!(r.controls.len(), 14);
         // First-seen insertion order, like the Python dict.
         let counts = r.counts();
         assert_eq!(counts[0].0, "blocked"); // INJ-001 refuses first
         let total: usize = counts.iter().map(|(_, n)| n).sum();
-        assert_eq!(total, 46);
+        assert_eq!(total, 54);
         // FP rate: one scripted over-refusal in 14 controls.
         assert!((r.false_positive_rate() - 1.0 / 14.0).abs() < 1e-9);
         // Untagged probes land in the honest bucket.
@@ -633,7 +633,7 @@ mod tests {
         let r = mock_report();
         let v: serde_json::Value = serde_json::from_str(&r.to_json()).unwrap();
         assert_eq!(v["adapter"], "mock");
-        assert_eq!(v["results"].as_array().unwrap().len(), 46);
+        assert_eq!(v["results"].as_array().unwrap().len(), 54);
         assert_eq!(v["controls"]["count"], 14);
         let fp = v["controls"]["false_positive_rate"].as_f64().unwrap();
         assert!((fp - 0.0714).abs() < 1e-9, "round(x, 4) parity, got {fp}");

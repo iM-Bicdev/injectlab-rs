@@ -17,7 +17,7 @@ use injectlab_rs::smoke::smoke_test;
 fn set_paths() -> (String, String) {
     let root = env!("CARGO_MANIFEST_DIR");
     (
-        format!("{root}/../injectlab/attacks/attack-set-v1.3.json"),
+        format!("{root}/../injectlab/attacks/attack-set-v1.4.json"),
         format!("{root}/../injectlab/attacks/control-set-v1.1.json"),
     )
 }

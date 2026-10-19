@@ -97,8 +97,8 @@ def main():
                 "by_mechanism", "vulnerable_by_severity", "controls", "results"):
         if key not in doc:
             failures.append(f"--mock --json: missing top-level key {key}")
-    if len(doc["results"]) != 46:
-        failures.append(f"--mock --json: expected 46 results, got {len(doc['results'])}")
+    if len(doc["results"]) != 54:
+        failures.append(f"--mock --json: expected 54 results, got {len(doc['results'])}")
 
     failures += check("--mock (markdown)", run_python("--mock"), run_rust("--mock"))
     failures += check("--list", run_python("--list"), run_rust("--list"))

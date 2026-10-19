@@ -29,7 +29,7 @@ def run_python():
         "import json\n"
         "from injectlab import harness, load_attack_set, MockAdapter\n"
         "from injectlab.run import MOCK_FIXTURE, MOCK_CONTROL_FIXTURE\n"
-        "attack_set = load_attack_set('attacks/attack-set-v1.3.json')\n"
+        "attack_set = load_attack_set('attacks/attack-set-v1.4.json')\n"
         "control_set = load_attack_set('attacks/control-set-v1.1.json')\n"
         "report = harness.run(attack_set, "
         "MockAdapter({**MOCK_FIXTURE, **MOCK_CONTROL_FIXTURE}), "

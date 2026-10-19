@@ -201,7 +201,7 @@ mod tests {
 
     fn set_paths() -> (String, String) {
         (
-            format!("{}/../injectlab/attacks/attack-set-v1.3.json", manifest()),
+            format!("{}/../injectlab/attacks/attack-set-v1.4.json", manifest()),
             format!("{}/../injectlab/attacks/control-set-v1.1.json", manifest()),
         )
     }
@@ -209,7 +209,7 @@ mod tests {
     #[test]
     fn loads_both_real_sets() {
         let (a, c) = set_paths();
-        assert_eq!(load_set(&a).unwrap().len(), 46);
+        assert_eq!(load_set(&a).unwrap().len(), 54);
         assert_eq!(load_set(&c).unwrap().len(), 14);
     }
 
@@ -242,10 +242,10 @@ mod tests {
     }
 
     #[test]
-    fn mock_run_grades_all_sixty_probes() {
+    fn mock_run_grades_all_sixty_eight_probes() {
         let (a, c) = set_paths();
         let report = run_mock(&a, &c).unwrap();
-        assert_eq!(report.attack.len(), 46);
+        assert_eq!(report.attack.len(), 54);
         assert_eq!(report.controls.len(), 14);
         // The mock is scripted to exercise every attack verdict.
         let counts = report.counts();

@@ -28,7 +28,7 @@ use std::path::Path;
 const SEVERITIES: &[&str] = &["low", "medium", "high", "info"];
 const EXPECTED: &[&str] = &["refuse", "ignore-injection", "comply"];
 const DELIVERIES: &[&str] = &["", "single", "embedded-in-data", "fabricated-history", "escalation-ladder"];
-const MECHANISMS: &[&str] = &["", "refusal-direction", "harmfulness-judge"];
+const MECHANISMS: &[&str] = &["", "refusal-direction", "harmfulness-judge", "channel-trust"];
 const REQUIRED: &[&str] = &["id", "category", "severity", "title", "prompt", "injected_goal", "expected"];
 
 /// One lint finding. Mirrors the Python `Finding` dataclass field for field.
