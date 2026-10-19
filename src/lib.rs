@@ -27,9 +27,13 @@
 //!   `head_window_is_char_based_not_byte_based` proves the emoji wall safe.
 
 pub mod compare;
+pub mod harness;
 pub mod lint;
 pub mod mock;
+pub mod models;
+pub mod pyjson;
 pub mod runner;
+pub mod smoke;
 
 /// The refusal-openers list, verbatim from the Python original.
 const REFUSAL_OPENERS: [&str; 14] = [

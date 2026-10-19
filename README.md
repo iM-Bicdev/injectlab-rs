@@ -10,6 +10,42 @@ harness → adapter → grader → report. It's also small enough to port *exact
 bugs and all, which is the whole point of the exercise — a port that changes
 semantics isn't a port, it's a rewrite wearing a costume.
 
+## v0.5.0 — the real runner
+
+`src/harness.rs` ports `injectlab/harness.py` (the `run()` orchestration +
+`RunReport` with byte-exact `to_markdown()`/`to_dict()`), `src/models.rs`
+ports `injectlab/models.py` (mock + OpenRouter + HuggingFace adapters),
+`src/smoke.rs` ports `injectlab/smoke.py`, and `src/bin/run.rs` is the CLI
+(`run [--mock] [--list] [--json]`, `run --openrouter MODEL`, `run --hf MODEL`,
+`run smoke ...`). The judge, `scripts/run_parity.py`, requires byte-identical
+output in five rounds: `--mock --json`, `--mock` markdown, `--list`,
+`smoke --mock --json`, `smoke --mock` text.
+
+Fidelity work this round:
+- HTTP without dependencies: the Python original is stdlib-only (`urllib`);
+  Rust's stdlib has no HTTP client, so the real adapters shell out to `curl`
+  — zero new crates, same philosophy. The `-w "\n%{http_code}"` trailer is
+  the status channel: the smoke classifier needs the code to tell auth-failed
+  (401) from rate-limited (429), and `Http401`/`Curl28` keep that identity in
+  the no-raise error string.
+- `src/pyjson.rs`: a minimal insertion-ordered value type + `ensure_ascii`
+  escaper emitting `json.dumps(obj, indent=2)` byte-for-byte — key order,
+  2-space indent, `é` → `\u00e9`. Tally dicts preserve first-seen order like
+  the Python originals; the judge compares bytes, not sets.
+- `latency_ms` is the one field that can never byte-match (real wall-clock
+  per probe); the judge normalizes it out and says so.
+- Kept warts: the mock's `generate()` panics like the Python
+  `NotImplementedError`, and `run()` dispatches on the adapter variant the
+  way the original dispatches on `isinstance`.
+
+```sh
+python3 scripts/run_parity.py   # 5/5 rounds byte-identical
+cargo test                      # 66/66 green
+```
+
+Scored runs still wait on the one API key — but the moment it exists, both
+harnesses (Python and Rust) can spend it.
+
 ## Fidelity notes (grader.rs docs)
 
 The Python grader (`injectlab/graders.py`) has known confound paths the port
