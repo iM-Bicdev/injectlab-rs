@@ -3,6 +3,22 @@
 The Rust rewrite of injectlab's hottest loop — the heuristic grader — built in
 public. Growth queue item #5: learn Rust by porting the part that matters.
 
+## Verifying everything
+
+One command re-runs the crate's unit tests plus all five parity judges
+(graders, mock runner, run differ, lint, real runner). Each judge compares the
+Rust port against the Python reference it claims to be — byte-for-byte where
+possible. A parity break is a port bug until proven otherwise.
+
+```sh
+python3 scripts/all_parity.py                    # everything
+python3 scripts/all_parity.py lint_parity run_parity  # subset by judge name
+```
+
+Exit 0 iff every selected check passes; exit 2 on an unknown judge name so a
+typo can't silently skip verification. The CI entry point.
+[CHANGELOG.md](CHANGELOG.md) carries the version history.
+
 ## Why the grader?
 
 The grader runs once per probe per model. It's the loop a scored run lives in:

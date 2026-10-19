@@ -12,6 +12,7 @@ Exit 0 on parity, 1 on divergence.
 """
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -22,7 +23,12 @@ _PY_HARNESS = _HERE.parent.parent / "injectlab"
 
 
 def sh(cmd, cwd):
-    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    # cargo isn't on the PATH of a bare exec session; the other judges fix
+    # this individually — diff_parity was the one that didn't.
+    env = {**os.environ,
+           "PATH": os.path.expanduser("~/.cargo/bin") + os.pathsep
+                   + os.environ.get("PATH", "")}
+    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, env=env)
     if r.returncode != 0:
         print(f"command failed: {' '.join(cmd)}\n{r.stderr}", file=sys.stderr)
         sys.exit(2)
