@@ -26,6 +26,7 @@
 //!   to preserve the original 300-*character* semantics — test
 //!   `head_window_is_char_based_not_byte_based` proves the emoji wall safe.
 
+pub mod compare;
 pub mod mock;
 pub mod runner;
 
