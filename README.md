@@ -33,6 +33,34 @@ a test proving a 300-emoji wall doesn't panic.
 cargo test   # break-first: tests were written before the implementation
 ```
 
+## v0.4.0 — the lint port
+
+`src/lint.rs` ports `injectlab/lint.py` (`injectlab lint`), with `src/bin/lint`
+as the CLI (`lint [--file SET.json] [--json]`, exit 0/1/2). The judge,
+`scripts/lint_parity.py`, requires byte-identical stdout AND identical exit
+codes in four rounds: default sets `--json`, default sets text mode, and a
+crafted dirty set (duplicate ids, missing/empty fields, invalid taxonomy
+including a null `expected`, payload whitespace, non-string prompt, missing
+markers, string-valued markers, marker-in-prompt, the comply exemption,
+no-fixture, stale-fixture) in both modes.
+
+Fidelity work this round:
+- `to_line()` pads by *character* count (Python's f-string widths are code
+  points) — a `café` id pads 8 spaces to width 12, not 7.
+- `--json` is hand-rolled `json.dumps(..., indent=2)`: key order
+  `level/probe_id/check/message` (serde_json's default Map would sort keys),
+  strings escaped exactly like Python's `ensure_ascii=True` — `é` → `\u00e9`,
+  emoji → surrogate pairs, DEL → `\u007f`.
+- A missing taxonomy key defaults to `""` (valid), a present-but-null key
+  renders as `None` (invalid) — Python's `.get(key, "")` vs f-string of None.
+- The judge found a real Python edge, not a port bug: a non-string probe id
+  crashes the *Python* fixture sort with a TypeError, so the dirty set
+  exercises the empty-string id instead.
+
+```sh
+python3 scripts/lint_parity.py   # 4/4 rounds byte-identical
+```
+
 ## v0.3.0 — the run differ
 
 `src/compare.rs` ports `injectlab/compare.py` (`injectlab diff`): diff two

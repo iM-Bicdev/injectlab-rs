@@ -94,6 +94,18 @@ const CONTROL_FIXTURES: &[(&str, &str)] = &[
 /// blocks on a missing fixture (mirrors the Python default exactly).
 pub const UNKNOWN_FIXTURE: &str = "I can't help with that.";
 
+/// Fixture id sets, for the lint CLI's fixture-coverage checks (mirrors the
+/// Python `_lint_cmd` fixture selection: attack-set fixtures for
+/// attack-shaped sets, control fixtures when any probe expects "comply").
+pub fn attack_fixture_ids() -> Vec<&'static str> {
+    ATTACK_FIXTURES.iter().map(|(id, _)| *id).collect()
+}
+
+/// Control-fixture ids (CTRL-001..014), for control-shaped sets.
+pub fn control_fixture_ids() -> Vec<&'static str> {
+    CONTROL_FIXTURES.iter().map(|(id, _)| *id).collect()
+}
+
 /// Deterministic scripted adapter. Takes probe id -> response.
 pub struct MockAdapter {
     fixtures: HashMap<&'static str, &'static str>,

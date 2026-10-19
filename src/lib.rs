@@ -27,6 +27,7 @@
 //!   `head_window_is_char_based_not_byte_based` proves the emoji wall safe.
 
 pub mod compare;
+pub mod lint;
 pub mod mock;
 pub mod runner;
 
